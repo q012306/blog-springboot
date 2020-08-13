@@ -20,7 +20,7 @@ public class JWTUtil {
         // expire time
         Calendar nowTime = Calendar.getInstance();
         // 有效期
-        nowTime.add(Calendar.HOUR, 3);
+        nowTime.add(Calendar.HOUR, 12);
         Date expiresDate = nowTime.getTime();
         Claims claims = Jwts.claims();
         claims.put("username", user.getUsername());

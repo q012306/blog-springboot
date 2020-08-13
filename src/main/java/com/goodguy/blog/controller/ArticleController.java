@@ -59,7 +59,7 @@ public class ArticleController {
             if (!f.getParentFile().exists())
                 f.getParentFile().mkdirs();
             file.transferTo(f);
-            String imgUrl = "http://localhost:8443/api/file/" + f.getName();
+            String imgUrl = "/api/file/" + f.getName();
             return ResultFactory.buildSuccessResult(imgUrl);
         } catch (IOException e) {
             e.printStackTrace();
