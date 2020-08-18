@@ -14,8 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JWTUtil {
-    private static final String SECRET = "GoodGuy1145141919";
+    private static final String SECRET = "@*#&$^%GoodGuy1145141919";
 
+    /**
+     * 用户鉴权
+     * @param user
+     * @return
+     */
     public static String CreateToken(User user){
         // expire time
         Calendar nowTime = Calendar.getInstance();
@@ -47,6 +52,33 @@ public class JWTUtil {
         }catch (Exception e){
             System.out.println("解析token错误！");
             return null;
+        }
+    }
+
+    /**
+     * 验证码
+     * @param CaptchaText
+     * @return
+     */
+    public static String CreateCaptchaToken(String CaptchaText){
+        // expire time
+        Calendar nowTime = Calendar.getInstance();
+        // 有效期
+        nowTime.add(Calendar.SECOND, 120);
+        Date expiresDate = nowTime.getTime();
+        String token = Jwts.builder().setExpiration(expiresDate)
+                .signWith(SignatureAlgorithm.HS256, CaptchaText+"GoodGuyPutSomeSaltInHere")
+                .compact();
+        return token;
+    }
+
+    public static Boolean VerifyCaptchaToken(String token,String CaptchaText){
+        try{
+            Jwts.parser().setSigningKey(CaptchaText+"GoodGuyPutSomeSaltInHere").parseClaimsJws(token);
+            return true;
+        }catch (Exception e){
+            System.out.println("解析验证码token错误！");
+            return false;
         }
     }
 

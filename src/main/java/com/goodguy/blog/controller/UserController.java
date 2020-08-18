@@ -20,11 +20,13 @@ public class UserController {
     UserService userService;
 
     @PostMapping(value = "/api/login")
-    public Result login(@RequestBody User requestUser) {
+    public Result login(@RequestBody Map loginMap) {
+        if(!JWTUtil.VerifyCaptchaToken((String)loginMap.get("captchaToken"),(String)loginMap.get("captchaText")))
+            return ResultFactory.buildFailResult("验证码错误");
+        String username = (String) loginMap.get("username");
         // 对 html 标签进行转义，防止 XSS 攻击
-        String username = requestUser.getUsername();
         username = HtmlUtils.htmlEscape(username);
-        User user = userService.get(username, requestUser.getPassword());
+        User user = userService.get(username,(String)loginMap.get("password"));
         if (null == user) {
             return ResultFactory.buildFailResult("账号不存在");
         } else {
